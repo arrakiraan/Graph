@@ -1,0 +1,117 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Cell 2: Load and prepare dataset
+data = pd.read_excel('student_marks_advanced.xlsx')
+subject_cols = ['Maths', 'Science', 'English', 'History', 'Computer']
+
+data['TotalMarks'] = data[subject_cols].sum(axis=1)
+data['AverageMarks'] = data['TotalMarks'] / len(subject_cols)
+data['Result'] = np.where((data[subject_cols] >= 40).all(axis=1), 'Pass', 'Fail')
+
+# Cell 3: Display preview
+display(data.head())
+
+# Cell 4: Grouped Bar Chart - Average Subject Marks by Gender
+plt.figure(figsize=(10,6))
+avg_by_gender = data.groupby('Gender')[subject_cols].mean()
+avg_by_gender.T.plot(kind='bar', figsize=(10,6))
+plt.title('Average Subject Marks by Gender')
+plt.ylabel('Average Marks')
+plt.xticks(rotation=0)
+plt.legend(title='Gender')
+plt.tight_layout()
+plt.savefig('avg_marks_by_gender.png')
+plt.show()
+
+# Cell 5: Stacked Bar Chart - Pass/Fail Distribution by Class
+result_counts = data.groupby(['Class','Result']).size().unstack(fill_value=0)
+result_counts.plot(kind='bar', stacked=True, color=['green','red'])
+plt.title('Pass/Fail Distribution by Class')
+plt.ylabel('Number of Students')
+plt.xlabel('Class')
+plt.legend(title='Result')
+plt.tight_layout()
+plt.savefig('pass_fail_by_class.png')
+plt.show()
+
+# Cell 6: Scatter Plot w/Regression Line - Maths vs Science
+plt.figure(figsize=(8,6))
+sns.regplot(x='Maths', y='Science', data=data, scatter_kws={'color':'blue'}, line_kws={'color':'orange'})
+plt.title('Maths vs Science Marks (w/Regression)')
+plt.xlabel('Maths Marks')
+plt.ylabel('Science Marks')
+plt.tight_layout()
+plt.savefig('maths_science_regression.png')
+plt.show()
+
+# Cell 7: Boxplot - AverageMarks by Class
+plt.figure(figsize=(8,6))
+sns.boxplot(x='Class', y='AverageMarks', data=data, palette='Set3')
+plt.title('Average Marks Distribution by Class')
+plt.ylabel('Average Marks')
+plt.tight_layout()
+plt.savefig('boxplot_avgmarks_by_class.png')
+plt.show()
+
+# Cell 8: Histogram + KDE - TotalMarks
+plt.figure(figsize=(8,6))
+sns.histplot(data['TotalMarks'], bins=10, kde=True, color='skyblue')
+plt.title('Distribution of Total Marks (w/KDE)')
+plt.xlabel('Total Marks')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.savefig('totalmarks_hist_kde.png')
+plt.show()
+
+# Cell 9: Radar Chart (Spider Plot) - 3 Students
+def make_spider_chart(student_names):
+    num_vars = len(subject_cols)
+    angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+    angles += angles[:1]
+    plt.figure(figsize=(7,7))
+    for name in student_names:
+        student = data[data['Name']==name].iloc[0]
+        values = student[subject_cols].tolist()
+        values += values[:1]
+        plt.polar(angles, values, label=name)
+    plt.xticks(angles[:-1], subject_cols)
+    plt.title('Student Subject Performance (Radar)')
+    plt.legend(loc='best')
+    plt.tight_layout()
+    plt.savefig('radar_chart_students.png')
+    plt.show()
+
+# Pick Top, Average, Weak performers
+top_student = data.loc[data['TotalMarks'].idxmax()]['Name']
+weak_student = data.loc[data['TotalMarks'].idxmin()]['Name']
+avg_student = data.iloc[(data['TotalMarks'] - data['TotalMarks'].mean()).abs().idxmin()]['Name']
+make_spider_chart([top_student, avg_student, weak_student])
+
+# Cell 10: Heatmap of Subject Correlations
+plt.figure(figsize=(8,6))
+corr_matrix = data[subject_cols].corr()
+sns.heatmap(corr_matrix, annot=True, cmap='RdBu')
+plt.title('Correlation Matrix: Subjects')
+plt.tight_layout()
+plt.savefig('heatmap_subject_correlation.png')
+plt.show()
+
+# Cell 11: Pie Chart - Gender Distribution
+plt.figure(figsize=(5,5))
+gender_counts = data['Gender'].value_counts()
+plt.pie(gender_counts, labels=gender_counts.index, autopct='%1.1f%%', colors=['skyblue','pink'])
+plt.title('Student Gender Distribution')
+plt.tight_layout()
+plt.savefig('pie_gender_distribution.png')
+plt.show()
+
+# Pie (Donut) Chart - Pass vs Fail Distribution
+plt.figure(figsize=(5,5))
+result_counts = data['Result'].value_counts()
+plt.pie(result_counts, labels=result_counts.index, autopct='%1.1f%%', colors=['lime','red'], wedgeprops=dict(width=0.5))
+plt.title('Student Result Distribution')
+plt.tight_layout()
+plt.savefig('pie_result_distribution.png')
+plt.show()
