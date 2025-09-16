@@ -23,7 +23,6 @@ print(data.head())
 
 app.mount("/charts", StaticFiles(directory="charts"), name="charts")
 
-
 @app.get("/students")
 def get_students():
     """Return dataset as JSON"""
