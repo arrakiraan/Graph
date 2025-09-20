@@ -107,7 +107,7 @@ def totalmarks_hist_kde():
     return FileResponse(filepath)
 
 
-# Cell 9: Radar Chart (Spider Plot) - 3 Students
+#  Radar Chart (Spider Plot) - 3 Students
 def make_spider_chart(student_names):
     num_vars = len(subject_cols)
     angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
@@ -131,7 +131,7 @@ weak_student = data.loc[data['TotalMarks'].idxmin()]['Name']
 avg_student = data.iloc[(data['TotalMarks'] - data['TotalMarks'].mean()).abs().idxmin()]['Name']
 make_spider_chart([top_student, avg_student, weak_student])
 
-# Cell 10: Heatmap of Subject Correlations
+# Heatmap of Subject Correlations
 @app.get("/chart/heatmap_subject_correlation")
 def heatmap_subject_correlation():
 
