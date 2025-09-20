@@ -112,7 +112,7 @@ def make_spider_chart(student_names):
     num_vars = len(subject_cols)
     angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
     angles += angles[:1]
-    plt.figure(figsize=(7,7))
+    plt.figure(figsize=(8,7))
     for name in student_names:
         student = data[data['Name']==name].iloc[0]
         values = student[subject_cols].tolist()
