@@ -66,7 +66,7 @@ def pass_fail_by_class():
 @app.get("/chart/maths_science_regression")
 def maths_science_regression():
     
-    plt.figure(figsize=(8,6))
+    plt.figure(figsize=(10,6))
     sns.regplot(x='Maths', y='Science', data=data, scatter_kws={'color':'blue'}, line_kws={'color':'orange'})
     plt.title('Maths vs Science Marks (w/Regression)')
     plt.xlabel('Maths Marks')
