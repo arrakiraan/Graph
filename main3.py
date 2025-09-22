@@ -28,7 +28,7 @@ def get_students():
     """Return dataset as JSON"""
     return JSONResponse(content=data.to_dict(orient="records"))
 
-# Cell 4: Grouped Bar Chart - Average Subject Marks by Gender
+# Grouped Bar Chart - Average Subject Marks by Gender
 @app.get("/chart/avg_marks_by_gender")
 def avg_marks_by_gender():
 
@@ -45,7 +45,7 @@ def avg_marks_by_gender():
     plt.close()
     return FileResponse(filepath)
 
-# Cell 5: Stacked Bar Chart - Pass/Fail Distribution by Class
+# Stacked Bar Chart - Pass/Fail Distribution by Class
 @app.get("/chart/Pass/pass_fail_by_class")
 def pass_fail_by_class():
 
